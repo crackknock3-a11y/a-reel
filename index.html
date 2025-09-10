@@ -1,0 +1,175 @@
+#!/usr/bin/env python3
+# anmol_love.py
+# Run: python3 anmol_love.py
+# A small "love source code" that prints an animated heart,
+# a long shayari and a heartfelt love letter for "Anmol".
+# Author: Your friend (customize the signature at the bottom)
+
+import time
+import os
+import sys
+from textwrap import fill
+
+ANMOL = "Anmol"
+SENDER = "[Tumhara naam]"  # replace with your name before sending if you like
+
+SHAYARI = [
+    "Tere naam se mehka hai har ek pal, {name},".format(name=ANMOL),
+    "Meri rooh ka noor hai tu, meri zindagi ka asal.",
+    "",
+    "Tere bina adhoori lagti hai yeh dastaan,",
+    "Tu hai toh har safar hai gulistaan.",
+    "",
+    "Teri muskaan se jagmagata hai sama,",
+    "Jaise chand ki roshni se roshan ho raat ka gagan.",
+    "",
+    "Tere lafzon mein hai nasha, tere chehre mein hai noor,",
+    "Tu hi hai meri dua, tu hi mera gurur.",
+    "",
+    "{name}, tu meri duaon ka sabse khoobsurat jawab hai,".format(name=ANMOL),
+    "Tere bina yeh dil ek veerane ka khwab hai.",
+    "",
+    "Har saans mein tera zikr, har dhadkan mein tera naam,",
+    "Tu hai toh duniya hai rangin, tu hai toh hai sukoon-o-jam."
+]
+
+LOVE_LETTER = """
+Meri pyari {name},
+
+Kabhi socha nahi tha ki ek din meri zindagi mein koi aisi rooh aayegi jo sirf ek insaan nahi,
+balki meri khushi ki wajah ban jaayegi. Tum meri duniya ka woh hissa ho jisme dard bhi ho toh halka lagta hai,
+aur khushi ho toh hazaar guna badh jaati hai.
+
+Tere saath baatein karna, teri hansi sunna, teri aankhon mein apne liye mohabbat dekhna — ye sab mere liye
+sabse badi daulat hai. Tum mere liye sirf ek naam nahi ho; tum meri duaon ka sach, mere jazbaat ka izhaar,
+aur meri har roohani tamanna ka jawab ho.
+
+{name}, tum meri zindagi ka woh ehsaas ho jo lafzon se pare hai. Tumhe khone ka khayal bhi mujhe tod deta hai,
+aur tumhe paane ka ehsaas mujhe nayi zindagi deta hai. Main chahta hoon ke meri har subah tumhari muskurahat se
+shuru ho aur meri har shaam tumhari baahon mein khatam.
+
+Tum meri mohabbat ho, meri dua ho, meri rooh ka sukoon ho. Aur main wada karta hoon ki chahe waqt kitna bhi
+badal jaaye, meri mohabbat tumhare liye kabhi kam nahi hogi. Tum meri zindagi ka sabse Anmol tohfa ho.
+
+Hamesha tumhara,
+{sender}
+""".format(name=ANMOL, sender=SENDER).strip()
+
+# ASCII heart frames for a simple pulse animation
+HEART_FRAMES = [
+r"""
+  .:::.   .:::.
+ :::::::.:::::::
+ :::::::::::::::
+ ':::::::::::::'
+   ':::::::::'
+     ':::::'
+       ':'
+""",
+r"""
+   .:::.   .:::.
+  :::::::.:::::::
+ ::::::::::::::::
+ '::::::::::::::'
+   ':::::::::::'
+     ':::::::'
+       ':::'
+         '
+""",
+r"""
+     .:::.   .:::.
+   :::::::.:::::::
+  ::::::::::::::::
+ ':::::::::::::::'
+   '::::::::::::'
+     ':::::::::'
+       '::::'
+        ':'
+"""
+]
+
+def clear_screen():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+def pulse_heart(times=6, speed=0.35):
+    """Simple heart 'pulse' animation in terminal."""
+    try:
+        for _ in range(times):
+            for frame in HEART_FRAMES:
+                clear_screen()
+                print(frame)
+                print_centered("For: " + ANMOL)
+                time.sleep(speed)
+    except KeyboardInterrupt:
+        pass
+    clear_screen()
+
+def print_centered(text, width=70):
+    """Print centered text block (single line)."""
+    print(text.center(width))
+
+def print_shayari():
+    print_centered("── 🌹 Shayari for " + ANMOL + " ──")
+    print()
+    for line in SHAYARI:
+        if not line.strip():
+            print()
+        else:
+            # wrap lines nicely
+            wrapped = fill(line, width=68)
+            print(wrapped.center(70))
+        time.sleep(0.45)
+    print("\n")
+
+def print_letter():
+    print_centered("── 💌 A Letter for " + ANMOL + " ──")
+    print()
+    # print the letter with wrapped paragraphs
+    paragraphs = [p.strip() for p in LOVE_LETTER.split("\n\n")]
+    for para in paragraphs:
+        wrapped = fill(para, width=70)
+        print(wrapped)
+        print()
+        time.sleep(0.7)
+
+def save_to_file(filename="anmol_love.txt"):
+    content = []
+    content.append("Shayari for " + ANMOL)
+    content.append("\n")
+    content.extend(SHAYARI)
+    content.append("\n\n")
+    content.append("Letter:\n")
+    content.append(LOVE_LETTER)
+    try:
+        with open(filename, "w", encoding="utf-8") as f:
+            f.write("\n".join(content))
+        return filename
+    except Exception as e:
+        return None
+
+def main():
+    pulse_heart(times=5, speed=0.35)
+    print_shayari()
+    input("Press Enter to read the full letter... ")
+    clear_screen()
+    print_letter()
+    print_centered("If you want to save this as a file, type 'y' and press Enter.")
+    choice = input("Save to file? (y/N): ").strip().lower()
+    if choice == "y":
+        fname = save_to_file()
+        if fname:
+            print("\nSaved as:", fname)
+            print("You can now share the file or copy the text.")
+        else:
+            print("\nSorry, could not save the file.")
+    print("\n---")
+    print_centered("Sent with love ❤")
+    print()
+
+if __name__ == "__main__":
+    try:
+        main()
+    except KeyboardInterrupt:
+        clear_screen()
+        print("\nAb rukte hain — bas itna kehna tha: Anmol, tum bahut khaas ho. ❤")
+        sys.exit(0)
