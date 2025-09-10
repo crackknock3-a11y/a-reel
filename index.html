@@ -1,175 +1,89 @@
-#!/usr/bin/env python3
-# anmol_love.py
-# Run: python3 anmol_love.py
-# A small "love source code" that prints an animated heart,
-# a long shayari and a heartfelt love letter for "Anmol".
-# Author: Your friend (customize the signature at the bottom)
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Love for Anmol</title>
+<style>
+  body {
+    margin:0;
+    height:100vh;
+    background:#000;
+    color:#00ff95;
+    font-family: "Courier New", monospace;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+  }
+  #screen {
+    max-width: 90%;
+    font-size: 1.2rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+  }
+  .cursor {
+    display:inline-block;
+    width:10px;
+    background:#00ff95;
+    margin-left:3px;
+    animation: blink 1s infinite;
+  }
+  @keyframes blink {
+    50% { background: transparent; }
+  }
+</style>
+</head>
+<body>
+  <div id="screen"></div>
+  <script>
+    const lines = [
+      ">>> Initializing Love for Anmol...",
+      ">>> Compiling Shayari...\n",
+      "Tere naam se mehka hai har ek pal, Anmol,",
+      "Meri rooh ka noor hai tu, meri zindagi ka asal.\n",
+      "Tere bina adhoori lagti hai yeh dastaan,",
+      "Tu hai toh har safar hai gulistaan.\n",
+      "Teri muskaan se jagmagata hai sama,",
+      "Jaise chand ki roshni se roshan ho raat ka gagan.\n",
+      "Tu meri dua, tu mera gurur...",
+      ">>> Shayari completed.\n",
+      ">>> Generating Love Letter...\n",
+      "Dear Anmol,\n",
+      "Kabhi socha nahi tha ki meri zindagi mein koi aayega",
+      "jo meri khushi ki wajah ban jaayega...",
+      "Tum meri duaon ka sach ho, meri rooh ka sukoon ho.",
+      "Tum meri zindagi ka sabse Anmol tohfa ho.\n",
+      "Hamesha tumhara,",
+      "[Tumhara Naam]\n",
+      ">>> Love compiled successfully ❤"
+    ];
 
-import time
-import os
-import sys
-from textwrap import fill
+    let i=0, text="", speed=55;
+    const screen = document.getElementById("screen");
+    const cursor = "<span class='cursor'></span>";
 
-ANMOL = "Anmol"
-SENDER = "[Tumhara naam]"  # replace with your name before sending if you like
-
-SHAYARI = [
-    "Tere naam se mehka hai har ek pal, {name},".format(name=ANMOL),
-    "Meri rooh ka noor hai tu, meri zindagi ka asal.",
-    "",
-    "Tere bina adhoori lagti hai yeh dastaan,",
-    "Tu hai toh har safar hai gulistaan.",
-    "",
-    "Teri muskaan se jagmagata hai sama,",
-    "Jaise chand ki roshni se roshan ho raat ka gagan.",
-    "",
-    "Tere lafzon mein hai nasha, tere chehre mein hai noor,",
-    "Tu hi hai meri dua, tu hi mera gurur.",
-    "",
-    "{name}, tu meri duaon ka sabse khoobsurat jawab hai,".format(name=ANMOL),
-    "Tere bina yeh dil ek veerane ka khwab hai.",
-    "",
-    "Har saans mein tera zikr, har dhadkan mein tera naam,",
-    "Tu hai toh duniya hai rangin, tu hai toh hai sukoon-o-jam."
-]
-
-LOVE_LETTER = """
-Meri pyari {name},
-
-Kabhi socha nahi tha ki ek din meri zindagi mein koi aisi rooh aayegi jo sirf ek insaan nahi,
-balki meri khushi ki wajah ban jaayegi. Tum meri duniya ka woh hissa ho jisme dard bhi ho toh halka lagta hai,
-aur khushi ho toh hazaar guna badh jaati hai.
-
-Tere saath baatein karna, teri hansi sunna, teri aankhon mein apne liye mohabbat dekhna — ye sab mere liye
-sabse badi daulat hai. Tum mere liye sirf ek naam nahi ho; tum meri duaon ka sach, mere jazbaat ka izhaar,
-aur meri har roohani tamanna ka jawab ho.
-
-{name}, tum meri zindagi ka woh ehsaas ho jo lafzon se pare hai. Tumhe khone ka khayal bhi mujhe tod deta hai,
-aur tumhe paane ka ehsaas mujhe nayi zindagi deta hai. Main chahta hoon ke meri har subah tumhari muskurahat se
-shuru ho aur meri har shaam tumhari baahon mein khatam.
-
-Tum meri mohabbat ho, meri dua ho, meri rooh ka sukoon ho. Aur main wada karta hoon ki chahe waqt kitna bhi
-badal jaaye, meri mohabbat tumhare liye kabhi kam nahi hogi. Tum meri zindagi ka sabse Anmol tohfa ho.
-
-Hamesha tumhara,
-{sender}
-""".format(name=ANMOL, sender=SENDER).strip()
-
-# ASCII heart frames for a simple pulse animation
-HEART_FRAMES = [
-r"""
-  .:::.   .:::.
- :::::::.:::::::
- :::::::::::::::
- ':::::::::::::'
-   ':::::::::'
-     ':::::'
-       ':'
-""",
-r"""
-   .:::.   .:::.
-  :::::::.:::::::
- ::::::::::::::::
- '::::::::::::::'
-   ':::::::::::'
-     ':::::::'
-       ':::'
-         '
-""",
-r"""
-     .:::.   .:::.
-   :::::::.:::::::
-  ::::::::::::::::
- ':::::::::::::::'
-   '::::::::::::'
-     ':::::::::'
-       '::::'
-        ':'
-"""
-]
-
-def clear_screen():
-    os.system('cls' if os.name == 'nt' else 'clear')
-
-def pulse_heart(times=6, speed=0.35):
-    """Simple heart 'pulse' animation in terminal."""
-    try:
-        for _ in range(times):
-            for frame in HEART_FRAMES:
-                clear_screen()
-                print(frame)
-                print_centered("For: " + ANMOL)
-                time.sleep(speed)
-    except KeyboardInterrupt:
-        pass
-    clear_screen()
-
-def print_centered(text, width=70):
-    """Print centered text block (single line)."""
-    print(text.center(width))
-
-def print_shayari():
-    print_centered("── 🌹 Shayari for " + ANMOL + " ──")
-    print()
-    for line in SHAYARI:
-        if not line.strip():
-            print()
-        else:
-            # wrap lines nicely
-            wrapped = fill(line, width=68)
-            print(wrapped.center(70))
-        time.sleep(0.45)
-    print("\n")
-
-def print_letter():
-    print_centered("── 💌 A Letter for " + ANMOL + " ──")
-    print()
-    # print the letter with wrapped paragraphs
-    paragraphs = [p.strip() for p in LOVE_LETTER.split("\n\n")]
-    for para in paragraphs:
-        wrapped = fill(para, width=70)
-        print(wrapped)
-        print()
-        time.sleep(0.7)
-
-def save_to_file(filename="anmol_love.txt"):
-    content = []
-    content.append("Shayari for " + ANMOL)
-    content.append("\n")
-    content.extend(SHAYARI)
-    content.append("\n\n")
-    content.append("Letter:\n")
-    content.append(LOVE_LETTER)
-    try:
-        with open(filename, "w", encoding="utf-8") as f:
-            f.write("\n".join(content))
-        return filename
-    except Exception as e:
-        return None
-
-def main():
-    pulse_heart(times=5, speed=0.35)
-    print_shayari()
-    input("Press Enter to read the full letter... ")
-    clear_screen()
-    print_letter()
-    print_centered("If you want to save this as a file, type 'y' and press Enter.")
-    choice = input("Save to file? (y/N): ").strip().lower()
-    if choice == "y":
-        fname = save_to_file()
-        if fname:
-            print("\nSaved as:", fname)
-            print("You can now share the file or copy the text.")
-        else:
-            print("\nSorry, could not save the file.")
-    print("\n---")
-    print_centered("Sent with love ❤")
-    print()
-
-if __name__ == "__main__":
-    try:
-        main()
-    except KeyboardInterrupt:
-        clear_screen()
-        print("\nAb rukte hain — bas itna kehna tha: Anmol, tum bahut khaas ho. ❤")
-        sys.exit(0)
+    function typeLine() {
+      if(i < lines.length){
+        let line = lines[i] + "\n";
+        let j=0;
+        function typeChar(){
+          if(j < line.length){
+            text += line[j];
+            screen.innerHTML = text + cursor;
+            j++;
+            setTimeout(typeChar, speed);
+          } else {
+            i++;
+            setTimeout(typeLine, 400);
+          }
+        }
+        typeChar();
+      } else {
+        screen.innerHTML = text; // remove cursor at end
+      }
+    }
+    typeLine();
+  </script>
+</body>
+</html>
